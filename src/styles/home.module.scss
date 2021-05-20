@@ -1,0 +1,44 @@
+.homeContainer {
+  margin-top: 4.06rem;
+  span {
+    color: var(--gray-50);
+    font-size: 2.125rem;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+  }
+}
+
+.content {
+  display: flex;
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
+  color: var(--gray-100);
+  svg {
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  time {
+    display: flex;
+    margin-right: 1.85rem;
+  }
+
+  p {
+    display: flex;
+    margin-top: 0;
+    font-size: 0.875rem;
+  }
+}
+
+.contentButton {
+  background: none;
+  border: none;
+  color: var(--pink-500);
+  font-weight: 600;
+  margin-top: 4.12rem;
+}
