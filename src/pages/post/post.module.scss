@@ -10,26 +10,28 @@
   h1 {
     margin-bottom: 1.5rem;
   }
+}
 
-  > div {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 4rem;
-    svg {
-      margin-right: 0.5rem;
-    }
-
-    time {
-      display: flex;
-      margin-right: 1.85rem;
-    }
-
-    p {
-      display: flex;
-      margin-right: 1.85rem;
-    }
+.headingContent {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 4rem;
+  svg {
+    margin-right: 0.5rem;
   }
 
+  time {
+    display: flex;
+    margin-right: 1.85rem;
+  }
+
+  p {
+    display: flex;
+    margin-right: 1.85rem;
+  }
+}
+
+.bodyContent {
   h2 {
     margin-top: 3rem;
     margin-bottom: 3rem;

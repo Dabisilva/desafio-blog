@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import { Header } from '../../components/Header';
@@ -13,7 +12,7 @@ import styles from './post.module.scss';
 import commonStyles from '../../styles/common.module.scss';
 
 interface Post {
-  slug: string;
+  uid: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -49,10 +48,9 @@ export default function Post({ post }: PostProps) {
         });
       });
 
-      let number = countReadLength / 200;
+      let number = countReadLength / 150;
 
-      console.log(number);
-      return Math.round(number);
+      return Math.round(number) + ' min';
     }
   }
 
@@ -63,25 +61,23 @@ export default function Post({ post }: PostProps) {
   return (
     <>
       <Head>
-        <title>Post | {post.slug}</title>
+        <title>Post | {post.uid}</title>
       </Head>
 
       <Header />
 
-      <img
-        className={styles.image}
-        src={`${post.data.banner.url}`}
-        alt="bunner"
-      />
+      <img className={styles.image} src={post.data.banner.url} alt="bunner" />
 
       <main className={commonStyles.commom}>
         <div className={styles.container}>
           <h1>{post.data.title}</h1>
 
-          <div>
+          <div className={styles.headingContent}>
             <time>
               <FiCalendar size={20} />
-              {post.first_publication_date}
+              {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                locale: ptBR,
+              })}
             </time>
             <p>
               <FiUser size={20} />
@@ -89,18 +85,18 @@ export default function Post({ post }: PostProps) {
             </p>
             <p>
               <FiClock size={20} />
-              {countTimeReadLenght()} min
+              {countTimeReadLenght()}
             </p>
           </div>
 
           {post.data.content.map(contentData => (
-            <>
+            <div className={styles.bodyContent} key={contentData.heading}>
               <h2>{contentData.heading}</h2>
 
               {contentData.body.map(text => (
-                <p>{text.text}</p>
+                <p key={text.text}>{text.text}</p>
               ))}
-            </>
+            </div>
           ))}
         </div>
       </main>
@@ -118,9 +114,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
   );
 
+  const paramsReturn = posts.results.map(slug => {
+    return {
+      params: { slug: slug.uid },
+    };
+  });
+
   return {
     fallback: true,
-    paths: [{ params: { slug: posts.results[0].uid } }],
+    paths: paramsReturn,
   };
 };
 
@@ -131,7 +133,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const response = await prismic.getByUID('posts', String(slug), {});
 
   const post = {
-    slug,
+    uid: response.uid,
     data: {
       title: response.data.title,
       banner: {
@@ -141,13 +143,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       author: response.data.author,
       content: response.data.content,
     },
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: response.first_publication_date,
   };
 
   return {

@@ -38,8 +38,6 @@ export default function Home({ postsPagination }: HomeProps) {
     await fetch(postsPagination.next_page)
       .then(response => response.json())
       .then(data => {
-        //console.log(data)
-
         const postsData = data.results.map(post => {
           return {
             uid: post.uid,
@@ -84,7 +82,13 @@ export default function Home({ postsPagination }: HomeProps) {
                   <div className={styles.content}>
                     <time>
                       <FiCalendar size={20} />
-                      {post.first_publication_date}
+                      {format(
+                        new Date(post.first_publication_date),
+                        'dd MMM yyyy',
+                        {
+                          locale: ptBR,
+                        }
+                      )}
                     </time>
                     <p>
                       <FiUser size={20} />
@@ -129,13 +133,7 @@ export const getStaticProps: GetStaticProps = async () => {
         subtitle: post.data.subtitle,
         author: post.data.author,
       },
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'dd MMM yyyy',
-        {
-          locale: ptBR,
-        }
-      ),
+      first_publication_date: post.first_publication_date,
     };
   });
 
@@ -144,7 +142,6 @@ export const getStaticProps: GetStaticProps = async () => {
     results: posts,
   };
 
-  console.log(postsResponse);
   return {
     props: {
       postsPagination,
