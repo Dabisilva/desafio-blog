@@ -46,13 +46,7 @@ export default function Home({ postsPagination }: HomeProps) {
               subtitle: post.data.subtitle,
               author: post.data.author,
             },
-            first_publication_date: format(
-              new Date(post.first_publication_date),
-              'dd MMM yyyy',
-              {
-                locale: ptBR,
-              }
-            ),
+            first_publication_date: post.first_publication_date,
           };
         });
 
